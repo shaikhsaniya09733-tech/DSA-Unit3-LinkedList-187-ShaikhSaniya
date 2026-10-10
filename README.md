@@ -1,26 +1,31 @@
-# DSA Unit III – Linked List
-
-## Topic
-Smart Canteen Order Management System
+# Canteen Order Processing Using Linked List
 
 ## Problem Statement
-Implement a singly linked list to maintain student food orders. Perform insertion at the beginning and end, deletion of completed orders, searching for a specific order, and displaying all pending orders.
 
-## Description
-In a college canteen, managing multiple food orders manually can be difficult. This system uses a singly linked list to store and manage orders dynamically. Each node represents a food order and contains order details and a pointer to the next node.
+Develop a menu-driven C++ program using Singly Linked List, Doubly Linked List, and Circular Linked List to manage student food orders. The system performs insertion, deletion, searching, and traversal operations.
 
-## Data Structure Used
-Singly Linked List
+## Objectives
 
-## Operations
-1. Insert order at the beginning
-2. Insert order at the end
-3. Display pending orders
-4. Search an order
-5. Delete a completed order
+1. To implement SLL, DLL, and CLL in C++.
+2. To perform insertion and deletion operations.
+3. To search for specific food orders.
+4. To perform forward, backward, and circular traversal.
+5. To understand dynamic memory allocation.
+
+## Data Structures Used
+
+* Singly Linked List (SLL)
+* Doubly Linked List (DLL)
+* Circular Linked List (CLL)
 
 ## Programming Language
+
 C++
 
+## Project Application
+
+This project demonstrates the use of linked lists for processing food orders in a college canteen.
+
 ## Author
+
 Shaikh Saniya
