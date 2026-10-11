@@ -38,7 +38,7 @@ To develop a C++ program using Singly Linked List, Doubly Linked List, and Circu
 
 ## 7. Project Structure
 
-* `Problem_Statement.pdf` – Project problem statement and objectives.
+* `Problem_Statement.pdf` – Project problem statement.
 * `Source_Code/linkedlist.cpp` – C++ source code.
 * `Output/output.pdf` – Program output.
 * `Documentation/Report.pdf` – Project report.
