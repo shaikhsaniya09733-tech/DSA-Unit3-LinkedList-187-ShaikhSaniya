@@ -2,391 +2,440 @@
 #include <string>
 using namespace std;
 
-// Singly Linked List Node
-struct SNode
-{
+// Singly Linked List
+struct SNode {
     int id;
     string name, food;
     SNode *next;
 };
 
-// Doubly Linked List Node
-struct DNode
-{
+SNode *sHead = NULL;
+
+// Doubly Linked List
+struct DNode {
     int id;
     string name, food;
     DNode *prev, *next;
 };
 
-// Circular Linked List Node
-struct CNode
-{
+DNode *dHead = NULL;
+
+// Circular Linked List
+struct CNode {
     int id;
     string name, food;
     CNode *next;
 };
 
-SNode *sHead = NULL;
-DNode *dHead = NULL;
-CNode *cHead = NULL;
-
-// Input order details
-void inputOrder(int &id, string &name, string &food)
-{
+// Common input function
+void inputOrder(int &id, string &name, string &food) {
     cout << "Enter Order ID: ";
     cin >> id;
 
     cout << "Enter Student Name: ";
-    cin >> name;
+    getline(cin >> ws, name);
 
     cout << "Enter Food Item: ";
-    cin >> food;
+    getline(cin, food);
 }
 
 // ================= SINGLY LINKED LIST =================
 
-// Insert at beginning
-void sInsertBeginning()
-{
-    SNode *n = new SNode;
+void sInsertPosition() {
+    int pos, id;
+    string name, food;
 
-    inputOrder(n->id, n->name, n->food);
+    cout << "Enter position: ";
+    cin >> pos;
 
-    n->next = sHead;
-    sHead = n;
-
-    cout << "Order added successfully!\n";
-}
-
-// Insert at end
-void sInsertEnd()
-{
-    SNode *n = new SNode;
-
-    inputOrder(n->id, n->name, n->food);
-    n->next = NULL;
-
-    if (sHead == NULL)
-    {
-        sHead = n;
-    }
-    else
-    {
-        SNode *t = sHead;
-
-        while (t->next != NULL)
-            t = t->next;
-
-        t->next = n;
-    }
-
-    cout << "Order added successfully!\n";
-}
-
-// Display orders
-void sDisplay()
-{
-    SNode *t = sHead;
-
-    if (t == NULL)
-    {
-        cout << "No orders found!\n";
+    if (pos < 1) {
+        cout << "Invalid position!\n";
         return;
     }
 
-    while (t != NULL)
-    {
-        cout << "\nOrder ID: " << t->id
-             << "\nStudent: " << t->name
-             << "\nFood: " << t->food << endl;
+    inputOrder(id, name, food);
 
-        t = t->next;
+    SNode *n = new SNode{id, name, food, NULL};
+
+    if (pos == 1) {
+        n->next = sHead;
+        sHead = n;
+        cout << "Order inserted successfully.\n";
+        return;
+    }
+
+    SNode *temp = sHead;
+
+    for (int i = 1; temp != NULL && i < pos - 1; i++)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        cout << "Invalid position!\n";
+        delete n;
+        return;
+    }
+
+    n->next = temp->next;
+    temp->next = n;
+
+    cout << "Order inserted successfully.\n";
+}
+
+void sDisplay() {
+    SNode *temp = sHead;
+
+    if (temp == NULL) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    cout << "\nID\tStudent\t\tFood\n";
+
+    while (temp != NULL) {
+        cout << temp->id << "\t"
+             << temp->name << "\t\t"
+             << temp->food << "\n";
+        temp = temp->next;
     }
 }
 
-// Search order
-void sSearch()
-{
+void sSearch() {
     int id;
     cout << "Enter Order ID to search: ";
     cin >> id;
 
-    SNode *t = sHead;
+    SNode *temp = sHead;
 
-    while (t != NULL)
-    {
-        if (t->id == id)
-        {
+    while (temp != NULL) {
+        if (temp->id == id) {
             cout << "Order Found: "
-                 << t->name << " - " << t->food << endl;
+                 << temp->name << " - "
+                 << temp->food << "\n";
             return;
         }
-
-        t = t->next;
+        temp = temp->next;
     }
 
-    cout << "Order not found!\n";
+    cout << "Order not found.\n";
 }
 
-// Delete order
-void sDelete()
-{
+void sDeleteID() {
     int id;
     cout << "Enter Order ID to delete: ";
     cin >> id;
 
-    SNode *t = sHead, *p = NULL;
+    SNode *temp = sHead, *prev = NULL;
 
-    while (t != NULL && t->id != id)
-    {
-        p = t;
-        t = t->next;
+    while (temp != NULL && temp->id != id) {
+        prev = temp;
+        temp = temp->next;
     }
 
-    if (t == NULL)
-    {
-        cout << "Order not found!\n";
+    if (temp == NULL) {
+        cout << "Order not found.\n";
         return;
     }
 
-    if (p == NULL)
-        sHead = t->next;
+    if (prev == NULL)
+        sHead = temp->next;
     else
-        p->next = t->next;
+        prev->next = temp->next;
 
-    delete t;
-    cout << "Order deleted successfully!\n";
+    delete temp;
+    cout << "Order deleted successfully.\n";
+}
+
+void sDeletePosition() {
+    int pos;
+    cout << "Enter position to delete: ";
+    cin >> pos;
+
+    if (pos < 1 || sHead == NULL) {
+        cout << "Invalid position or empty list.\n";
+        return;
+    }
+
+    SNode *temp = sHead;
+
+    if (pos == 1) {
+        sHead = sHead->next;
+        delete temp;
+        cout << "Order deleted successfully.\n";
+        return;
+    }
+
+    SNode *prev = NULL;
+
+    for (int i = 1; temp != NULL && i < pos; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    prev->next = temp->next;
+    delete temp;
+
+    cout << "Order deleted successfully.\n";
 }
 
 // ================= DOUBLY LINKED LIST =================
 
-// Insert at end
-void dInsertEnd()
-{
-    DNode *n = new DNode;
+void dInsertPosition() {
+    int pos, id;
+    string name, food;
 
-    inputOrder(n->id, n->name, n->food);
-    n->prev = NULL;
-    n->next = NULL;
+    cout << "Enter position: ";
+    cin >> pos;
 
-    if (dHead == NULL)
-    {
+    if (pos < 1) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    inputOrder(id, name, food);
+
+    DNode *n = new DNode{id, name, food, NULL, NULL};
+
+    if (pos == 1) {
+        n->next = dHead;
+
+        if (dHead != NULL)
+            dHead->prev = n;
+
         dHead = n;
-    }
-    else
-    {
-        DNode *t = dHead;
-
-        while (t->next != NULL)
-            t = t->next;
-
-        t->next = n;
-        n->prev = t;
-    }
-
-    cout << "Order added successfully!\n";
-}
-
-// Insert at beginning
-void dInsertBeginning()
-{
-    DNode *n = new DNode;
-
-    inputOrder(n->id, n->name, n->food);
-
-    n->prev = NULL;
-    n->next = dHead;
-
-    if (dHead != NULL)
-        dHead->prev = n;
-
-    dHead = n;
-
-    cout << "Order added successfully!\n";
-}
-
-// Forward traversal
-void dForward()
-{
-    DNode *t = dHead;
-
-    if (t == NULL)
-    {
-        cout << "No orders found!\n";
+        cout << "Order inserted successfully.\n";
         return;
     }
 
-    while (t != NULL)
-    {
-        cout << "\nOrder ID: " << t->id
-             << "\nStudent: " << t->name
-             << "\nFood: " << t->food << endl;
+    DNode *temp = dHead;
 
-        t = t->next;
-    }
-}
+    for (int i = 1; temp != NULL && i < pos - 1; i++)
+        temp = temp->next;
 
-// Backward traversal
-void dBackward()
-{
-    DNode *t = dHead;
-
-    if (t == NULL)
-    {
-        cout << "No orders found!\n";
+    if (temp == NULL) {
+        cout << "Invalid position!\n";
+        delete n;
         return;
     }
 
-    while (t->next != NULL)
-        t = t->next;
+    n->next = temp->next;
+    n->prev = temp;
 
-    while (t != NULL)
-    {
-        cout << "\nOrder ID: " << t->id
-             << "\nStudent: " << t->name
-             << "\nFood: " << t->food << endl;
+    if (temp->next != NULL)
+        temp->next->prev = n;
 
-        t = t->prev;
+    temp->next = n;
+
+    cout << "Order inserted successfully.\n";
+}
+
+void dForward() {
+    DNode *temp = dHead;
+
+    if (temp == NULL) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    cout << "\nForward Traversal:\n";
+
+    while (temp != NULL) {
+        cout << temp->id << " - "
+             << temp->name << " - "
+             << temp->food << "\n";
+        temp = temp->next;
     }
 }
 
-// Search order
-void dSearch()
-{
+void dBackward() {
+    DNode *temp = dHead;
+
+    if (temp == NULL) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    cout << "\nBackward Traversal:\n";
+
+    while (temp != NULL) {
+        cout << temp->id << " - "
+             << temp->name << " - "
+             << temp->food << "\n";
+        temp = temp->prev;
+    }
+}
+
+void dSearch() {
     int id;
     cout << "Enter Order ID to search: ";
     cin >> id;
 
-    DNode *t = dHead;
+    DNode *temp = dHead;
 
-    while (t != NULL)
-    {
-        if (t->id == id)
-        {
+    while (temp != NULL) {
+        if (temp->id == id) {
             cout << "Order Found: "
-                 << t->name << " - " << t->food << endl;
+                 << temp->name << " - "
+                 << temp->food << "\n";
             return;
         }
-
-        t = t->next;
+        temp = temp->next;
     }
 
-    cout << "Order not found!\n";
+    cout << "Order not found.\n";
 }
 
-// Delete order
-void dDelete()
-{
+void dDeleteID() {
     int id;
     cout << "Enter Order ID to delete: ";
     cin >> id;
 
-    DNode *t = dHead;
+    DNode *temp = dHead;
 
-    while (t != NULL && t->id != id)
-        t = t->next;
+    while (temp != NULL && temp->id != id)
+        temp = temp->next;
 
-    if (t == NULL)
-    {
-        cout << "Order not found!\n";
+    if (temp == NULL) {
+        cout << "Order not found.\n";
         return;
     }
 
-    if (t->prev != NULL)
-        t->prev->next = t->next;
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
     else
-        dHead = t->next;
+        dHead = temp->next;
 
-    if (t->next != NULL)
-        t->next->prev = t->prev;
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
 
-    delete t;
-    cout << "Order deleted successfully!\n";
+    delete temp;
+    cout << "Order deleted successfully.\n";
+}
+
+void dDeletePosition() {
+    int pos;
+    cout << "Enter position to delete: ";
+    cin >> pos;
+
+    if (pos < 1 || dHead == NULL) {
+        cout << "Invalid position or empty list.\n";
+        return;
+    }
+
+    DNode *temp = dHead;
+
+    for (int i = 1; temp != NULL && i < pos; i++)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+    else
+        dHead = temp->next;
+
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+
+    delete temp;
+    cout << "Order deleted successfully.\n";
 }
 
 // ================= CIRCULAR LINKED LIST =================
 
-// Insert at end
-void cInsertEnd()
-{
-    CNode *n = new CNode;
+CNode *cHead = NULL;
 
-    inputOrder(n->id, n->name, n->food);
+void cInsertPosition() {
+    int pos, id;
+    string name, food;
 
-    if (cHead == NULL)
-    {
-        cHead = n;
-        n->next = cHead;
-    }
-    else
-    {
-        CNode *t = cHead;
+    cout << "Enter position: ";
+    cin >> pos;
 
-        while (t->next != cHead)
-            t = t->next;
-
-        t->next = n;
-        n->next = cHead;
-    }
-
-    cout << "Order added successfully!\n";
-}
-
-// Insert at beginning
-void cInsertBeginning()
-{
-    CNode *n = new CNode;
-
-    inputOrder(n->id, n->name, n->food);
-
-    if (cHead == NULL)
-    {
-        cHead = n;
-        n->next = cHead;
-    }
-    else
-    {
-        CNode *t = cHead;
-
-        while (t->next != cHead)
-            t = t->next;
-
-        n->next = cHead;
-        t->next = n;
-        cHead = n;
-    }
-
-    cout << "Order added successfully!\n";
-}
-
-// Circular traversal
-void cDisplay()
-{
-    if (cHead == NULL)
-    {
-        cout << "No orders found!\n";
+    if (pos < 1) {
+        cout << "Invalid position!\n";
         return;
     }
 
-    CNode *t = cHead;
+    inputOrder(id, name, food);
 
-    do
-    {
-        cout << "\nOrder ID: " << t->id
-             << "\nStudent: " << t->name
-             << "\nFood: " << t->food << endl;
+    CNode *n = new CNode{id, name, food, NULL};
 
-        t = t->next;
+    if (cHead == NULL) {
+        if (pos != 1) {
+            cout << "Invalid position!\n";
+            delete n;
+            return;
+        }
 
-    } while (t != cHead);
+        n->next = n;
+        cHead = n;
+        cout << "Order inserted successfully.\n";
+        return;
+    }
+
+    if (pos == 1) {
+        CNode *last = cHead;
+
+        while (last->next != cHead)
+            last = last->next;
+
+        n->next = cHead;
+        last->next = n;
+        cHead = n;
+
+        cout << "Order inserted successfully.\n";
+        return;
+    }
+
+    CNode *temp = cHead;
+
+    for (int i = 1; i < pos - 1 && temp->next != cHead; i++)
+        temp = temp->next;
+
+    if (pos > 1 && temp->next == cHead && pos - 1 > 1) {
+        cout << "Invalid position!\n";
+        delete n;
+        return;
+    }
+
+    n->next = temp->next;
+    temp->next = n;
+
+    cout << "Order inserted successfully.\n";
 }
 
-// Search order
-void cSearch()
-{
-    if (cHead == NULL)
-    {
-        cout << "No orders found!\n";
+void cDisplay() {
+    if (cHead == NULL) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    CNode *temp = cHead;
+
+    cout << "\nCircular Traversal:\n";
+
+    do {
+        cout << temp->id << " - "
+             << temp->name << " - "
+             << temp->food << "\n";
+        temp = temp->next;
+    } while (temp != cHead);
+}
+
+void cSearch() {
+    if (cHead == NULL) {
+        cout << "List is empty.\n";
         return;
     }
 
@@ -394,30 +443,24 @@ void cSearch()
     cout << "Enter Order ID to search: ";
     cin >> id;
 
-    CNode *t = cHead;
+    CNode *temp = cHead;
 
-    do
-    {
-        if (t->id == id)
-        {
+    do {
+        if (temp->id == id) {
             cout << "Order Found: "
-                 << t->name << " - " << t->food << endl;
+                 << temp->name << " - "
+                 << temp->food << "\n";
             return;
         }
+        temp = temp->next;
+    } while (temp != cHead);
 
-        t = t->next;
-
-    } while (t != cHead);
-
-    cout << "Order not found!\n";
+    cout << "Order not found.\n";
 }
 
-// Delete order
-void cDelete()
-{
-    if (cHead == NULL)
-    {
-        cout << "No orders found!\n";
+void cDeleteID() {
+    if (cHead == NULL) {
+        cout << "List is empty.\n";
         return;
     }
 
@@ -425,34 +468,25 @@ void cDelete()
     cout << "Enter Order ID to delete: ";
     cin >> id;
 
-    CNode *t = cHead, *p = NULL;
+    CNode *temp = cHead, *prev = NULL;
 
-    do
-    {
-        if (t->id == id)
+    do {
+        if (temp->id == id)
             break;
 
-        p = t;
-        t = t->next;
+        prev = temp;
+        temp = temp->next;
+    } while (temp != cHead);
 
-    } while (t != cHead);
-
-    if (t->id != id)
-    {
-        cout << "Order not found!\n";
+    if (temp->id != id) {
+        cout << "Order not found.\n";
         return;
     }
 
-    // Only one node
-    if (t->next == t)
-    {
-        delete t;
+    if (temp->next == temp) {
         cHead = NULL;
-    }
-    else
-    {
-        if (t == cHead)
-        {
+    } else {
+        if (temp == cHead) {
             CNode *last = cHead;
 
             while (last->next != cHead)
@@ -460,127 +494,248 @@ void cDelete()
 
             cHead = cHead->next;
             last->next = cHead;
+        } else {
+            prev->next = temp->next;
         }
-        else
-        {
-            p->next = t->next;
-        }
-
-        delete t;
     }
 
-    cout << "Order deleted successfully!\n";
+    delete temp;
+    cout << "Order deleted successfully.\n";
+}
+
+void cDeletePosition() {
+    if (cHead == NULL) {
+        cout << "List is empty.\n";
+        return;
+    }
+
+    int pos;
+    cout << "Enter position to delete: ";
+    cin >> pos;
+
+    if (pos < 1) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    CNode *temp = cHead;
+
+    if (pos == 1) {
+        if (cHead->next == cHead) {
+            delete cHead;
+            cHead = NULL;
+        } else {
+            CNode *last = cHead;
+
+            while (last->next != cHead)
+                last = last->next;
+
+            CNode *oldHead = cHead;
+            cHead = cHead->next;
+            last->next = cHead;
+            delete oldHead;
+        }
+
+        cout << "Order deleted successfully.\n";
+        return;
+    }
+
+    CNode *prev = NULL;
+
+    for (int i = 1; i < pos && temp->next != cHead; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == cHead || prev == NULL) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    prev->next = temp->next;
+    delete temp;
+
+    cout << "Order deleted successfully.\n";
 }
 
 // ================= MAIN MENU =================
 
-int main()
-{
-    int mainChoice, choice;
+int main() {
+    int choice, op;
 
-    do
-    {
-        cout << "\n=== Canteen Order Processing ===\n";
+    do {
+        cout << "\n===== CANTEEN ORDER PROCESSING =====\n";
         cout << "1. Singly Linked List\n";
         cout << "2. Doubly Linked List\n";
         cout << "3. Circular Linked List\n";
         cout << "4. Exit\n";
         cout << "Enter choice: ";
-        cin >> mainChoice;
+        cin >> choice;
 
-        if (mainChoice == 1)
-        {
-            do
-            {
-                cout << "\n--- Singly Linked List ---\n";
-                cout << "1. Insert at Beginning\n";
-                cout << "2. Insert at End\n";
-                cout << "3. Display Orders\n";
-                cout << "4. Search Order\n";
-                cout << "5. Delete Order\n";
+        if (choice == 1) {
+            do {
+                cout << "\n--- SINGLY LINKED LIST ---\n";
+                cout << "1. Insert at Beginning/End/Position\n";
+                cout << "2. Display\n";
+                cout << "3. Search by ID\n";
+                cout << "4. Delete by ID\n";
+                cout << "5. Delete by Position\n";
                 cout << "6. Back to Main Menu\n";
                 cout << "Enter choice: ";
-                cin >> choice;
+                cin >> op;
 
-                switch (choice)
-                {
-                    case 1: sInsertBeginning(); break;
-                    case 2: sInsertEnd(); break;
-                    case 3: sDisplay(); break;
-                    case 4: sSearch(); break;
-                    case 5: sDelete(); break;
-                    case 6: break;
-                    default: cout << "Invalid choice!\n";
-                }
+                if (op == 1) {
+                    int p;
+                    cout << "1. Beginning  2. End  3. Position\n";
+                    cin >> p;
 
-            } while (choice != 6);
-        }
-        else if (mainChoice == 2)
-        {
-            do
-            {
-                cout << "\n--- Doubly Linked List ---\n";
-                cout << "1. Insert at Beginning\n";
-                cout << "2. Insert at End\n";
-                cout << "3. Forward Traversal\n";
-                cout << "4. Backward Traversal\n";
-                cout << "5. Search Order\n";
-                cout << "6. Delete Order\n";
+                    if (p == 1) {
+                        cout << "Enter position 1 to insert at beginning.\n";
+                        sInsertPosition();
+                    } else if (p == 2) {
+                        int pos = 1;
+                        SNode *t = sHead;
+                        while (t != NULL) {
+                            pos++;
+                            t = t->next;
+                        }
+                        cout << "Inserting at end (position "
+                             << pos << ").\n";
+                        // Insert at the calculated end position
+                        int id;
+                        string name, food;
+                        inputOrder(id, name, food);
+                        SNode *n = new SNode{id, name, food, NULL};
+                        if (sHead == NULL)
+                            sHead = n;
+                        else {
+                            t = sHead;
+                            while (t->next != NULL)
+                                t = t->next;
+                            t->next = n;
+                        }
+                        cout << "Order inserted successfully.\n";
+                    } else if (p == 3) {
+                        sInsertPosition();
+                    }
+                } else if (op == 2) sDisplay();
+                else if (op == 3) sSearch();
+                else if (op == 4) sDeleteID();
+                else if (op == 5) sDeletePosition();
+
+            } while (op != 6);
+
+        } else if (choice == 2) {
+            do {
+                cout << "\n--- DOUBLY LINKED LIST ---\n";
+                cout << "1. Insert at Beginning/End/Position\n";
+                cout << "2. Forward Traversal\n";
+                cout << "3. Backward Traversal\n";
+                cout << "4. Search by ID\n";
+                cout << "5. Delete by ID\n";
+                cout << "6. Delete by Position\n";
                 cout << "7. Back to Main Menu\n";
                 cout << "Enter choice: ";
-                cin >> choice;
+                cin >> op;
 
-                switch (choice)
-                {
-                    case 1: dInsertBeginning(); break;
-                    case 2: dInsertEnd(); break;
-                    case 3: dForward(); break;
-                    case 4: dBackward(); break;
-                    case 5: dSearch(); break;
-                    case 6: dDelete(); break;
-                    case 7: break;
-                    default: cout << "Invalid choice!\n";
-                }
+                if (op == 1) {
+                    int p;
+                    cout << "1. Beginning  2. End  3. Position\n";
+                    cin >> p;
 
-            } while (choice != 7);
-        }
-        else if (mainChoice == 3)
-        {
-            do
-            {
-                cout << "\n--- Circular Linked List ---\n";
-                cout << "1. Insert at Beginning\n";
-                cout << "2. Insert at End\n";
-                cout << "3. Display Orders\n";
-                cout << "4. Search Order\n";
-                cout << "5. Delete Order\n";
+                    if (p == 1) {
+                        dInsertPosition();
+                    } else if (p == 2) {
+                        int pos = 1;
+                        DNode *t = dHead;
+                        while (t != NULL) {
+                            pos++;
+                            t = t->next;
+                        }
+                        cout << "Inserting at end (position "
+                             << pos << ").\n";
+                        int id;
+                        string name, food;
+                        inputOrder(id, name, food);
+                        DNode *n = new DNode{id, name, food, NULL, NULL};
+                        if (dHead == NULL)
+                            dHead = n;
+                        else {
+                            t = dHead;
+                            while (t->next != NULL)
+                                t = t->next;
+                            t->next = n;
+                            n->prev = t;
+                        }
+                        cout << "Order inserted successfully.\n";
+                    } else if (p == 3) {
+                        dInsertPosition();
+                    }
+                } else if (op == 2) dForward();
+                else if (op == 3) dBackward();
+                else if (op == 4) dSearch();
+                else if (op == 5) dDeleteID();
+                else if (op == 6) dDeletePosition();
+
+            } while (op != 7);
+
+        } else if (choice == 3) {
+            do {
+                cout << "\n--- CIRCULAR LINKED LIST ---\n";
+                cout << "1. Insert at Beginning/End/Position\n";
+                cout << "2. Display Circular List\n";
+                cout << "3. Search by ID\n";
+                cout << "4. Delete by ID\n";
+                cout << "5. Delete by Position\n";
                 cout << "6. Back to Main Menu\n";
                 cout << "Enter choice: ";
-                cin >> choice;
+                cin >> op;
 
-                switch (choice)
-                {
-                    case 1: cInsertBeginning(); break;
-                    case 2: cInsertEnd(); break;
-                    case 3: cDisplay(); break;
-                    case 4: cSearch(); break;
-                    case 5: cDelete(); break;
-                    case 6: break;
-                    default: cout << "Invalid choice!\n";
-                }
+                if (op == 1) {
+                    int p;
+                    cout << "1. Beginning  2. End  3. Position\n";
+                    cin >> p;
 
-            } while (choice != 6);
+                    if (p == 1 || p == 3) {
+                        cInsertPosition();
+                    } else if (p == 2) {
+                        int pos = 1;
+                        if (cHead != NULL) {
+                            CNode *t = cHead;
+                            do {
+                                pos++;
+                                t = t->next;
+                            } while (t != cHead);
+                        }
+                        cout << "Inserting at end (position "
+                             << pos << ").\n";
+                        int id;
+                        string name, food;
+                        inputOrder(id, name, food);
+                        CNode *n = new CNode{id, name, food, NULL};
+
+                        if (cHead == NULL) {
+                            n->next = n;
+                            cHead = n;
+                        } else {
+                            CNode *t = cHead;
+                            while (t->next != cHead)
+                                t = t->next;
+                            t->next = n;
+                            n->next = cHead;
+                        }
+                        cout << "Order inserted successfully.\n";
+                    }
+                } else if (op == 2) cDisplay();
+                else if (op == 3) cSearch();
+                else if (op == 4) cDeleteID();
+                else if (op == 5) cDeletePosition();
+
+            } while (op != 6);
         }
-        else if (mainChoice == 4)
-        {
-            cout << "Thank you!\n";
-        }
-        else
-        {
-            cout << "Invalid choice!\n";
-        }
 
-    } while (mainChoice != 4);
+    } while (choice != 4);
 
+    cout << "Program ended.\n";
     return 0;
 }
