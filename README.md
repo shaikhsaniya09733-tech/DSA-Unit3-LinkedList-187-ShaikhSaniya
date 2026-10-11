@@ -1,31 +1,48 @@
 # Canteen Order Processing Using Linked List
 
-## Problem Statement
+## 1. Project Overview
 
-Develop a menu-driven C++ program using Singly Linked List, Doubly Linked List, and Circular Linked List to manage student food orders. The system performs insertion, deletion, searching, and traversal operations.
+This project is a menu-driven C++ program used to manage student food orders in a college canteen using linked lists.
 
-## Objectives
+## 2. Problem Statement
 
-1. To implement SLL, DLL, and CLL in C++.
-2. To perform insertion and deletion operations.
-3. To search for specific food orders.
-4. To perform forward, backward, and circular traversal.
-5. To understand dynamic memory allocation.
+To develop a C++ program using Singly Linked List, Doubly Linked List, and Circular Linked List to manage canteen food orders through insertion, deletion, searching, and traversal operations.
 
-## Data Structures Used
+## 3. Objectives
 
-* Singly Linked List (SLL)
-* Doubly Linked List (DLL)
-* Circular Linked List (CLL)
+* To implement Singly Linked List (SLL).
+* To implement Doubly Linked List (DLL).
+* To implement Circular Linked List (CLL).
+* To perform insertion and deletion at different positions.
+* To search for a specific food order.
+* To perform forward, backward, and circular traversal.
+* To understand dynamic memory allocation using `new` and `delete`.
 
-## Programming Language
+## 4. Data Structures Used
 
-C++
+* **Singly Linked List:** Each node contains a pointer to the next node.
+* **Doubly Linked List:** Each node contains pointers to the previous and next nodes.
+* **Circular Linked List:** The last node points back to the first node.
 
-## Project Application
+## 5. Operations
 
-This project demonstrates the use of linked lists for processing food orders in a college canteen.
+* Insertion at the beginning, end, and a specified position.
+* Deletion of an order by ID or from a specified position.
+* Searching for an order.
+* Displaying and traversing the linked lists.
 
-## Author
+## 6. Technologies Used
 
-Shaikh Saniya
+* Programming Language: C++
+* Concepts: Pointers, Structures, Dynamic Memory Allocation, Linked Lists.
+
+## 7. Project Structure
+
+* `Problem_Statement.pdf` – Project problem statement and objectives.
+* `Source_Code/linkedlist.cpp` – C++ source code.
+* `Output/output.pdf` – Program output.
+* `Documentation/Report.pdf` – Project report.
+
+## 8. Conclusion
+
+This project demonstrates the use of Singly, Doubly, and Circular Linked Lists for managing canteen food orders and understanding linked list operations in C++.
